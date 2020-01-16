@@ -1,2 +1,2 @@
-# MVC-Node-Applivation
+# MVC-Node-Application
 MVC with node application
