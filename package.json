@@ -1,0 +1,29 @@
+{
+  "name": "mvc-node-app",
+  "version": "1.0.0",
+  "description": "MVC with node application",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rajasekar1729/MVC-Node-Application.git"
+  },
+  "author": "Rajasekar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rajasekar1729/MVC-Node-Application/issues"
+  },
+  "homepage": "https://github.com/Rajasekar1729/MVC-Node-Application#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "bootstrap": "^4.4.1",
+    "cookie-parser": "^1.4.4",
+    "debug": "^4.1.1",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "mongoose": "^5.8.7",
+    "morgan": "^1.9.1"
+  }
+}
