@@ -24,7 +24,7 @@
                         <% if (userList) { %>
                         <% userList.forEach(function(user){ %>
                         <tr>
-                            <td><%= user.name %></td>
+                            <td><%= user.username %></td>
                             <td><%= user.email %></td>
                             <td><%= user.age %></td>
                             <td>
@@ -58,14 +58,15 @@
         </div>
     </div>
     <script>
-        var editor;
         $(document).ready(function () {
-            $('#datatable').dataTable({
-                initComplete: function(){
-                    $("#datatable_length").append('<button type="button" class="btn btn-primary" style="margin-left: 10px;" onClick="redirectToUserAdd();">Create New</button>');
+//             $('#datatable').dataTable({
+//                 initComplete: function(){
+//                     $("#datatable_length").append('<button type="button" class="btn btn-primary" style="margin-left: 10px;" onClick="redirectToUserAdd();">Create New</button>');
 
-   } 
-            });
+//    } 
+//             });
+
+            $('#datatable').dataTable();
 
         });
 

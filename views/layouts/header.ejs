@@ -24,8 +24,14 @@
     <header style="background: linear-gradient(to left, #76b852, #8DC26F);">
 
             <nav class="navbar fixed-top navbar-expand-lg navbar-dark pink scrolling-navbar">
-              <a class="navbar-brand" href="#"><strong>My Node Application</strong></a>
-              <a class="navbar-brand" style="color:white;float:right;" href="#"><strong>Login as no@email.com</strong></a>
+              <a class="navbar-brand" href="#" style="float: left;"><strong>My Node Application</strong></a>
+              <span style="float:right">
+                <a class="navbar-brand" style="color:white;" href="#"><strong>Login as <%= locals.LoggedIn.username  %></strong></a>
+                <a href="/users/logout" title="Logout" class="btn btn-lg" style="color: #ffffff;font-size: 20px;">
+                  <span class="glyphicon glyphicon-log-out"></span>
+                </a>
+              </span>
+              
             </nav>
           
           </header>

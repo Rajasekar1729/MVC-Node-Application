@@ -1,11 +1,44 @@
-var mongoose = require("mongoose");
 var User = require("../models/User");
+var multer = require('multer');
 
-var employeeController = {};
+var userController = {};
+
+// Set The Storage Engine
+const storage = multer.diskStorage({
+  destination: 'public/ProfilePhotos',
+  filename: function(req, file, cb){
+    cb(null,file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+
+// Init Upload
+const upload = multer({
+  storage: storage,
+  limits:{fileSize: 1000000},
+  fileFilter: function(req, file, cb){
+    checkFileType(file, cb);
+  }
+}).single('myImage');
+
+// Check File Type
+function checkFileType(file, cb){
+  // Allowed ext
+  const filetypes = /jpeg|jpg|png|gif/;
+  // Check ext
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  // Check mime
+  const mimetype = filetypes.test(file.mimetype);
+
+  if(mimetype && extname){
+    return cb(null,true);
+  } else {
+    cb('Error: Images Only!');
+  }
+}
 
 // Show list of users
-employeeController.list = function(req, res) {
-  User.find({}).exec(function (err, users) {
+userController.list = (req, res) => {
+  User.find({}).exec((err, users) => {
     if (err) {
       console.log("Error:", err);
     }
@@ -16,64 +49,90 @@ employeeController.list = function(req, res) {
   });
 };
 
-// Show employee by id
-employeeController.show = function(req, res) {
-  User.findOne({_id: req.params.id}).exec(function (err, employee) {
+// Show list of users
+userController.loginValidation = (req, res) => {
+  User.find({username: req.body.username}).exec((err, user) => {
     if (err) {
       console.log("Error:", err);
     }
     else {
-      res.render("../views/users/edit", {employee: employee});
+      console.log("login vaidation", user);
+      
+      if(user.length > 0) {
+        req.session.LoggedIn = user[0];
+        res.redirect("/users");
+      } else {
+        res.render("../index", {isError: true, ErrorDescription: "Unable to login Please signup."});
+      }
     }
   });
 };
 
-// Create new employee
-employeeController.create = function(req, res) {
+//logout
+userController.logout = (req, res) => {
+  req.session.destroy();
+  res.redirect("/");
+};
+
+// Show user by id
+userController.show = (req, res) => {
+  User.findOne({_id: req.params.id}).exec((err, user) => {
+    if (err) {
+      console.log("Error:", err);
+    }
+    else {
+      res.render("../views/users/edit", {user: user});
+    }
+  });
+};
+
+// Create new user
+userController.create = (req, res) => {
   res.render("../views/users/create");
 };
 
-// Save new employee
-employeeController.save = function(req, res) {
-  var employee = new User(req.body);
+// Save new user
+userController.save = (req, res) => {
+  var user = new User(req.body);
 
-  employee.save(function(err) {
+  user.save((err) => {
     if(err) {
       console.log(err);
-      res.render("../views/users/create");
+      res.render("../views/createAccount");
     } else {
-      console.log("Successfully created an employee.");
-      res.redirect("/users/edit/"+employee._id);
+      console.log("Successfully created an user.");
+      req.session.LoggedIn = user;
+      res.redirect("/users");
     }
   });
 };
 
-// Edit an employee
-employeeController.edit = function(req, res) {
-  User.findOne({_id: req.params.id}).exec(function (err, employee) {
+// Edit an user
+userController.edit = (req, res) => {
+  User.findOne({_id: req.params.id}).exec((err, user) => {
     if (err) {
       console.log("Error:", err);
     }
     else {
-      res.render("../views/users/edit", {employee: employee});
+      res.render("../views/users/edit", {user: user});
     }
   });
 };
 
-// Update an employee
-employeeController.update = function(req, res) {
-  User.findByIdAndUpdate(req.params.id, { $set: { name: req.body.name, address: req.body.address, position: req.body.position, salary: req.body.salary }}, { new: true }, function (err, employee) {
+// Update an user
+userController.update = (req, res) => {
+  User.findByIdAndUpdate(req.params.id, { $set: { username: req.body.username, email: req.body.email, age: req.body.age }}, { new: true }, (err, user) => {
     if (err) {
       console.log(err);
-      res.render("../views/users/edit", {employee: req.body});
+      res.render("../views/users/edit", {user: req.body});
     }
-    res.redirect("/users/edit/"+employee._id);
+    res.redirect("/users");
   });
 };
 
-// Delete an employee
-employeeController.delete = function(req, res) {
-  User.remove({_id: req.params.id}, function(err) {
+// Delete an user
+userController.delete = (req, res) => {
+  User.remove({_id: req.params.id}, (err) => {
     if(err) {
       console.log(err);
     }
@@ -84,4 +143,28 @@ employeeController.delete = function(req, res) {
   });
 };
 
-module.exports = employeeController;
+// Photo Upload an user
+userController.photoUpload = (req, res) => {
+  console.log("photoUpload called req",req);
+  upload(req, res, (err) => {
+    if(err){
+      res.render('index', {
+        msg: err
+      });
+    } else {
+      if(req.file == undefined){
+        console.log("No File");
+      } else {
+        User.findByIdAndUpdate(req.params.id, { $set: { profilePhotoPath: req.file.filename }}, { new: true }, (err, user) => {
+          if (err) {
+            console.log(err);
+            res.render("../views/users/edit", {user: req.body});
+          }
+          res.send("Picture saved");
+        });
+      }
+    }
+  });  
+};
+
+module.exports = userController;

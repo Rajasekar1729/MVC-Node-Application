@@ -1,10 +1,11 @@
 var mongoose = require('mongoose');
 
 var UserSchema = new mongoose.Schema({
-  name: String,
+  username: String,
   email: String,
   age: Number,
-  password: String,  
+  password: String,
+  profilePhotoPath: String, 
   updated_at: { type: Date, default: Date.now },
 });
 

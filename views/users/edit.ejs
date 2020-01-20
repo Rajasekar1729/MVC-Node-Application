@@ -1,5 +1,56 @@
 <%- include('../layouts/header.ejs') %>
 
-Edit Called
+<style>
+        .avatar-pic {
+    width: 150px;
+    }
+    </style>
+    <div class="container">
+        <div class="row">
+            <h2 class="text-center">Edit User</h2>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                    <form class="md-form">
+                            <div class="file-field">
+                              <div class="mb-4">
+                                <img src="https://mdbootstrap.com/img/Photos/Others/placeholder-avatar.jpg"
+                                  class="rounded-circle z-depth-1-half avatar-pic" alt="example placeholder avatar">
+                              </div>
+                              <div class="d-flex justify-content-center">
+                                  <!--   PHOTO--> 
+                                <form action="/users/photoUpload/<%= user.id %>" enctype="multipart/form-data" method="POST"> 
+                                  <input type="file" name="profilePhotoPath" accept="image/*" />
+                                  <input type="submit" value="Upload Photo"/>
+                                </form>
+                              </div>
+                            </div>
+                          </form>
+            </div>
+            <div class="col-md-9">
+                    <form action="/users/update/<%= user.id %>" method="post">
+                            <div class="form-group">
+                                    <label for="nametxt">UserName</label>
+                                    <input type="text" required name="username" class="form-control" id="nametxt" value="<%= user.username  %>" aria-describedby="text" placeholder="Enter name">                                
+                            </div>
+                            <div class="form-group">
+                              <label for="emailtxt">Email address</label>
+                              <input type="email" required class="form-control" name="email" id="emailtxt" value="<%= user.email  %>" aria-describedby="emailHelp" placeholder="Enter email">
+                            </div>
+                            <div class="form-group">
+                                    <label for="nametxt">Age</label>
+                                    <input type="text" required class="form-control" id="agetxt" name="age" value="<%= user.age  %>" aria-describedby="text" placeholder="Enter age">                                
+                            </div>
+                            <button id="updateBtn" type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            //$("#updateBtn")
+        });
+    </script>
 
 <%- include('../layouts/footer.ejs') %>
