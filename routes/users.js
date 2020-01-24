@@ -56,7 +56,7 @@ router.get('/logout', (req, res) => {
 });
 
 
-// Edit update
+// Upload update
 router.post('/photoUpload/:id', auth,(req, res) => {
   console.log("photoUpload called");
   user.photoUpload(req, res);

@@ -1,5 +1,6 @@
 var User = require("../models/User");
 var multer = require('multer');
+var path = require('path');
 
 var userController = {};
 
@@ -18,7 +19,7 @@ const upload = multer({
   fileFilter: function(req, file, cb){
     checkFileType(file, cb);
   }
-}).single('myImage');
+}).single('profilePhotoPath');
 
 // Check File Type
 function checkFileType(file, cb){
@@ -137,7 +138,6 @@ userController.delete = (req, res) => {
       console.log(err);
     }
     else {
-      console.log("User deleted!");
       res.redirect("/users");
     }
   });
@@ -145,12 +145,12 @@ userController.delete = (req, res) => {
 
 // Photo Upload an user
 userController.photoUpload = (req, res) => {
-  console.log("photoUpload called req",req);
   upload(req, res, (err) => {
     if(err){
       res.render('index', {
         msg: err
       });
+      console.log("Upload Err", err);
     } else {
       if(req.file == undefined){
         console.log("No File");
